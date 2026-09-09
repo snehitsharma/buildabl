@@ -17,6 +17,14 @@ def test_health_endpoint():
     assert response.json() == {"status": "ok"}
 
 
+def test_chat_endpoint_rejects_missing_query():
+    client = TestClient(app_module.app)
+
+    response = client.post("/chat", json={})
+
+    assert response.status_code == 422
+
+
 def test_chat_endpoint_returns_generated_response(monkeypatch):
     async def fake_get_cached_response(query):
         return None
