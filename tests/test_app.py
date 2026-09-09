@@ -18,9 +18,13 @@ def test_health_endpoint():
 
 
 def test_chat_endpoint_rejects_missing_query():
-    client = TestClient(app_module.app)
+    app_module.app.dependency_overrides[app_module.rate_limit] = allow_request
 
-    response = client.post("/chat", json={})
+    try:
+        client = TestClient(app_module.app)
+        response = client.post("/chat", json={})
+    finally:
+        app_module.app.dependency_overrides.clear()
 
     assert response.status_code == 422
 
