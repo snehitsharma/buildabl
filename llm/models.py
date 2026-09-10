@@ -14,4 +14,3 @@ def get_model():
 
 def call_model(message):
     return get_model().invoke(message)
-

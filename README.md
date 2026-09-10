@@ -1,6 +1,6 @@
 # Buildable Chatbot
 
-A FastAPI chatbot using LangGraph, Groq, Redis caching, and Redis-backed rate limiting.
+A FastAPI chatbot using LangGraph, Groq, Redis caching, Redis-backed rate limiting, and PostgreSQL.
 
 ## Requirements
 
@@ -23,6 +23,10 @@ The API is available at `http://localhost:8123`.
 - Swagger UI: `http://localhost:8123/docs`
 - Health check: `http://localhost:8123/health`
 - Chat endpoint: `POST http://localhost:8123/chat`
+
+PostgreSQL is available to the app at the Compose hostname `postgres`. From your
+host machine, database tools can connect to `localhost:5432` with database
+`chatbot`, user `chatbot`, and password `chatbot_password`.
 
 Example request:
 

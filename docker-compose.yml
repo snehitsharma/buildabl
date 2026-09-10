@@ -7,6 +7,7 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      DATABASE_URL: postgresql+psycopg://chatbot:chatbot_password@postgres:5432/chatbot
     ports:
       - "8123:8123"
     healthcheck:
@@ -16,6 +17,8 @@ services:
       retries: 5
     depends_on:
       redis:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     restart: unless-stopped
 
@@ -30,3 +33,24 @@ services:
       timeout: 3s
       retries: 10
     restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: buildable-chatbot-postgres
+    environment:
+      POSTGRES_USER: chatbot
+      POSTGRES_PASSWORD: chatbot_password
+      POSTGRES_DB: chatbot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chatbot -d chatbot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
